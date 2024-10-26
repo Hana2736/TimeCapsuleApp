@@ -2,6 +2,8 @@ package lol.hana.timecapsule;
 
 import android.os.Bundle;
 
+import android.view.View;
+import android.widget.LinearLayout;
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
@@ -20,5 +22,8 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        LinearLayout layout = findViewById(R.id.mainPageScrollLayout);
+        layout.addView(View.inflate(this, R.layout.caps_view,null));
     }
 }

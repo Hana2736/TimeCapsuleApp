@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                                                   android:layout_height="match_parent">
+    <TextView
+            android:text="Austin Trip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/tripNameLabel"
+            app:layout_constraintEnd_toEndOf="@+id/openDateLabel" app:layout_constraintStart_toStartOf="@+id/openDateLabel"
+            app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="8dp"
+    />
+    <TextView
+            android:text="Opens on 10/27/2024"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" android:id="@+id/openDateLabel"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/tripNameLabel"
+            android:layout_marginStart="8dp" android:layout_marginTop="8dp"/>
+    <TextView
+            android:text="✨ You went to Austin with something"
+            android:layout_width="0dp"
+            android:layout_height="0dp" android:id="@+id/aiSummary"
+            app:layout_constraintStart_toEndOf="@+id/openDateLabel" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/openDateLabel"
+            app:layout_constraintEnd_toStartOf="@+id/openCapBtn"
+            android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp" android:autoSizeTextType="uniform" android:autoSizeMaxTextSize="20sp"
+            android:autoSizeMinTextSize="8sp" android:autoSizeStepGranularity="2sp" android:gravity="center_vertical"/>
+    <Button
+            android:text="Open"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp" android:id="@+id/openCapBtn"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@+id/aiSummary"
+            app:layout_constraintBottom_toBottomOf="@+id/openDateLabel" android:layout_marginEnd="8dp"
+            app:layout_constraintVertical_bias="1.0"/>
+    <Button
+            android:layout_width="0dp"
+            android:layout_height="0dp" android:id="@+id/button2"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintBottom_toBottomOf="@+id/openCapBtn"
+            android:layout_marginBottom="-8dp" android:checkable="false" android:clickable="false"
+            android:enabled="false"/>
+</androidx.constraintlayout.widget.ConstraintLayout>
