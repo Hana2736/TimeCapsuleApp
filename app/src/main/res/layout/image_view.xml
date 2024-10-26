@@ -6,7 +6,7 @@
     <TextView
             android:text="Date: 11/11/1111"
             android:layout_width="176dp"
-            android:layout_height="30dp" android:id="@+id/textView"
+            android:layout_height="30dp" android:id="@+id/dateLabel"
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="8dp" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" android:gravity="center_horizontal|center_vertical"/>
@@ -14,8 +14,8 @@
             android:layout_height="0dp" app:srcCompat="@drawable/ic_launcher_background"
             android:id="@+id/imageView2"
             app:layout_constraintDimensionRatio="H,1:1"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" android:layout_marginTop="8dp"
-            app:layout_constraintStart_toEndOf="@+id/button3" app:layout_constraintEnd_toStartOf="@+id/button4"
+            app:layout_constraintTop_toBottomOf="@+id/imageTitleName" android:layout_marginTop="8dp"
+            app:layout_constraintStart_toEndOf="@+id/buttonPrevious" app:layout_constraintEnd_toStartOf="@+id/buttonNext"
             android:layout_width="0dp"
             android:layout_marginEnd="8dp" android:layout_marginStart="8dp"
             android:scaleType="fitCenter" app:layout_constraintHorizontal_bias=".5"
@@ -23,15 +23,15 @@
     <TextView
             android:text="Image Title Name"
             android:layout_width="168dp"
-            android:layout_height="32dp" android:id="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/textView"
+            android:layout_height="32dp" android:id="@+id/imageTitleName"
+            app:layout_constraintTop_toBottomOf="@+id/dateLabel"
             android:layout_marginTop="32dp" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:gravity="center_horizontal|center_vertical"/>
     <TextView
             android:text="AI Gen Information Summary using location data and geo"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/textView3"
+            android:layout_height="wrap_content" android:id="@+id/textSummary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" android:gravity="center_horizontal|center_vertical"
             android:layout_marginEnd="8dp" android:layout_marginStart="8dp"
@@ -39,7 +39,7 @@
     <Button
             android:text="<"
             android:layout_width="55dp"
-            android:layout_height="55dp" android:id="@+id/button3"
+            android:layout_height="55dp" android:id="@+id/buttonPrevious"
             app:layout_constraintBottom_toBottomOf="@+id/imageView2"
             app:layout_constraintTop_toTopOf="@+id/imageView2" app:layout_constraintStart_toStartOf="parent"
             android:gravity="center_horizontal|center_vertical"
@@ -48,9 +48,9 @@
     <Button
             android:text=">"
             android:layout_width="55dp"
-            android:layout_height="55dp" android:id="@+id/button4"
-            app:layout_constraintTop_toTopOf="@+id/button3"
-            app:layout_constraintBottom_toBottomOf="@+id/button3" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_height="55dp" android:id="@+id/buttonNext"
+            app:layout_constraintTop_toTopOf="@+id/buttonPrevious"
+            app:layout_constraintBottom_toBottomOf="@+id/buttonPrevious" app:layout_constraintEnd_toEndOf="parent"
             android:gravity="center_horizontal|center_vertical"
             android:autoSizeTextType="none" android:layout_marginEnd="8dp"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
