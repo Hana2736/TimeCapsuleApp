@@ -32,7 +32,7 @@
             android:layout_height="0dp" android:id="@+id/openCapBtn"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@+id/aiSummary"
             app:layout_constraintBottom_toBottomOf="@+id/openDateLabel" android:layout_marginEnd="16dp"
-            app:layout_constraintVertical_bias="1.0"/>
+            app:layout_constraintVertical_bias="1.0" android:enabled="false"/>
     <Button
             android:layout_width="0dp"
             android:layout_height="0dp" android:id="@+id/button2"
