@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   android:id="@+id/viewerPage"
                                                    android:layout_width="match_parent"
                                                    android:layout_height="match_parent">
 
@@ -11,12 +12,12 @@
             app:layout_constraintTop_toTopOf="parent"
             android:layout_marginTop="8dp" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" android:gravity="center_horizontal|center_vertical"
-            android:textAppearance="@style/TextAppearance.AppCompat.Display1"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1" android:textStyle="bold"/>
     <ImageView
-            android:layout_height="0dp" app:srcCompat="@drawable/car"
-            android:id="@+id/imageView2"
+            android:layout_height="0dp"
+            android:id="@+id/photoContainer"
             app:layout_constraintDimensionRatio="H,1:1"
-            app:layout_constraintTop_toBottomOf="@+id/imageTitleName" android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/imageTitleName" android:layout_marginTop="16dp"
             app:layout_constraintStart_toEndOf="@+id/buttonPrevious"
             app:layout_constraintEnd_toStartOf="@+id/buttonNext"
             android:layout_width="0dp"
@@ -28,24 +29,25 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" android:id="@+id/imageTitleName"
             app:layout_constraintTop_toBottomOf="@+id/dateLabel"
-            android:layout_marginTop="32dp" app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="24dp" app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             android:gravity="center_horizontal|center_vertical"
-            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+            android:textAppearance="@style/TextAppearance.AppCompat.Large" android:textStyle="bold"/>
     <TextView
-            android:text="AI Gen Information Summary using location data and geo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/textSummary"
+            android:text="StoryWBDKJYWDYWYDGWYGDYWGKJDYAGYGODGWYGDYWDGYJWDGYWGDYYWGDYWDAYDJWKJDYSGDYAWDYGYSGYDGWYKDGYSGDYWGAYSDGWYAGSYGDKJWYDA"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content" android:id="@+id/textStory"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" android:gravity="center_horizontal|center_vertical"
             android:layout_marginEnd="8dp" android:layout_marginStart="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2" android:layout_marginTop="8dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/photoContainer" android:layout_marginTop="24dp"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
     <Button
             android:text="@string/prevBtn"
             android:layout_width="55dp"
             android:layout_height="55dp" android:id="@+id/buttonPrevious"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView2"
-            app:layout_constraintTop_toTopOf="@+id/imageView2" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/photoContainer"
+            app:layout_constraintTop_toTopOf="@+id/photoContainer" app:layout_constraintStart_toStartOf="parent"
             android:gravity="center_horizontal|center_vertical"
             android:layout_marginStart="8dp" android:autoSizeTextType="none"
     />

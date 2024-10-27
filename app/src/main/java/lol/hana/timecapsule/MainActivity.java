@@ -81,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
                         SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
                         String openDateString = formatter.format(new Date(openTimeEpoch));
                         ((TextView) newCard.findViewById(R.id.openDateLabel)).setText("Opens on " + openDateString);
-
-                        ((TextView) newCard.findViewById(R.id.aiSummary)).setText("✨ AI-Generated Summary");
+                        String createdTimeStr = formatter.format(new Date(createTimeEpoch));
+                        ((TextView) newCard.findViewById(R.id.createdDateLabel)).setText("Sealed on " + createdTimeStr);
 
 
                         ZoneId systemZone = ZoneId.systemDefault();

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Time Capsule</string>
+    <string name="app_name">TimeVault</string>
     <string name="new_cap_label">+ New Time Capsule</string>
     <string name="nextBtn"><![CDATA[>]]></string>
     <string name="prevBtn"><![CDATA[<]]></string>

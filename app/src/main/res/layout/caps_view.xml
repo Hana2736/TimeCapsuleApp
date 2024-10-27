@@ -5,34 +5,36 @@
                                                    android:layout_height="match_parent">
     <TextView
             android:text="Austin Trip"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content" android:id="@+id/capsNameLabel"
-            app:layout_constraintEnd_toEndOf="@+id/openDateLabel"
-            app:layout_constraintStart_toStartOf="@+id/openDateLabel"
+            app:layout_constraintEnd_toEndOf="@+id/createdDateLabel"
+            app:layout_constraintStart_toStartOf="@+id/createdDateLabel"
             app:layout_constraintTop_toTopOf="parent" android:layout_marginTop="16dp"
-            android:textStyle="bold"/>
+            android:textStyle="bold" android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:autoSizeTextType="uniform" android:gravity="center_horizontal"/>
     <TextView
-            android:text="Opens on 10/27/2024"
+            android:text="Sealed on 10/27/2024"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:id="@+id/openDateLabel"
+            android:layout_height="wrap_content" android:id="@+id/createdDateLabel"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintTop_toBottomOf="@+id/capsNameLabel"
             android:layout_marginStart="16dp" android:layout_marginTop="8dp"/>
     <TextView
-            android:text="✨ You went to Austin with something"
             android:layout_width="0dp"
-            android:layout_height="0dp" android:id="@+id/aiSummary"
-            app:layout_constraintStart_toEndOf="@+id/openDateLabel" app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="@+id/openDateLabel"
+            android:layout_height="0dp" android:id="@+id/openDateLabel"
+            app:layout_constraintStart_toEndOf="@+id/createdDateLabel" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@+id/createdDateLabel"
             app:layout_constraintEnd_toStartOf="@+id/openCapBtn"
             android:layout_marginStart="16dp" android:layout_marginEnd="16dp"
             android:layout_marginTop="16dp" android:autoSizeTextType="uniform" android:autoSizeMaxTextSize="20sp"
-            android:autoSizeMinTextSize="8sp" android:autoSizeStepGranularity="2sp" android:gravity="center_vertical"/>
+            android:autoSizeMinTextSize="8sp" android:autoSizeStepGranularity="2sp"
+            android:text="Opens on  10/31/24" android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+            android:gravity="center"/>
     <Button
             android:text="Unlock"
             android:layout_width="wrap_content"
             android:layout_height="0dp" android:id="@+id/openCapBtn"
-            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@+id/aiSummary"
-            app:layout_constraintBottom_toBottomOf="@+id/openDateLabel" android:layout_marginEnd="16dp"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintTop_toTopOf="@+id/openDateLabel"
+            app:layout_constraintBottom_toBottomOf="@+id/createdDateLabel" android:layout_marginEnd="16dp"
             app:layout_constraintVertical_bias="1.0" android:enabled="false"/>
     <Button
             android:layout_width="0dp"
@@ -42,7 +44,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/openCapBtn"
             app:layout_constraintStart_toStartOf="parent" app:layout_constraintEnd_toEndOf="parent"
             android:layout_marginStart="8dp" android:layout_marginEnd="8dp" android:translationY="8dp"
-            style="@style/Widget.Material3.Button" app:cornerRadius="20dp" app:layout_constraintHorizontal_bias="0.0"
+            style="@style/Widget.Material3.Button" app:cornerRadius="16dp" app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintVertical_bias="0.0"/>
     <TextView
             android:layout_width="wrap_content"
