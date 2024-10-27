@@ -16,12 +16,14 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 
 public class EncryptionUtils {
+    public static final String serverBase = "https://direct.hana.lol:7773/?";
     public static void resetTempDir() {
         try {
             FileUtils.deleteDirectory(new File(MainActivity.workDir + "/temp/"));
             Files.deleteIfExists(Paths.get(MainActivity.workDir + "output.zip"));
             Files.deleteIfExists(Paths.get(MainActivity.workDir + "/Timestamp.txt"));
             Files.deleteIfExists(Paths.get(MainActivity.workDir + "/Title.txt"));
+            Files.deleteIfExists(Paths.get(MainActivity.workDir + "/TimeCreated.txt"));
         } catch (IOException e) {
             //should be ok
         }
@@ -35,7 +37,7 @@ public class EncryptionUtils {
     public static void decrypt_file(String workDir, String GUID) throws IOException, InvalidAlgorithmParameterException, InvalidKeyException, NoSuchPaddingException, NoSuchAlgorithmException {
         //TODO: curl request to server with GUID to get private key and iv
 
-        URL url = new URL("http://server.serv:2736/open=" + GUID);
+        URL url = new URL(serverBase+"open=" + GUID);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String response;
         try {
@@ -62,7 +64,7 @@ public class EncryptionUtils {
 
         try (FileInputStream fis = new FileInputStream(workDir + "/" + GUID + "/timecapsule.bin");
              CipherInputStream ins = new CipherInputStream(fis, AesCipher);
-             FileOutputStream fos = new FileOutputStream(workDir + "/temp")) {
+             FileOutputStream fos = new FileOutputStream(workDir + "/temp/output.zip")) {
 
             byte[] buffer = new byte[4096];
             int bytesRead;
@@ -71,8 +73,7 @@ public class EncryptionUtils {
             }
         }
 
-        File x = new File(workDir + "/"+GUID+"/timecapsule.bin");
-        x.delete();
+
         //TODO: display images or something, or onClick function that calls this can display the contents somehow
         //return null if server says "nah", upon which the UI will display an error toast with the date it should be unlocked
     }
@@ -89,7 +90,7 @@ public class EncryptionUtils {
     }
 
     public void encrypt_file(String workDir, long utc) throws NoSuchAlgorithmException, NoSuchPaddingException, InvalidKeyException, IOException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
-        URL url = new URL("http://10.0.2.2:2736/?encrypt=" + utc / 1000L);
+        URL url = new URL(serverBase+"encrypt=" + utc / 1000L);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         String response;
         try {
@@ -131,6 +132,7 @@ public class EncryptionUtils {
         x.delete();
         Files.move(Paths.get(workDir + "/Title.txt"), Paths.get(workDir + "/" + guid + "/Title.txt"));
         Files.move(Paths.get(workDir + "/Timestamp.txt"), Paths.get(workDir + "/" + guid + "/Timestamp.txt"));
+        Files.move(Paths.get(workDir + "/TimeCreated.txt"), Paths.get(workDir + "/" + guid + "/TimeCreated.txt"));
 
         resetTempDir();
 

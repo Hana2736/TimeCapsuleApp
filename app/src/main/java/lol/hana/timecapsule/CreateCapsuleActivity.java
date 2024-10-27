@@ -162,6 +162,12 @@ public class CreateCapsuleActivity extends AppCompatActivity {
                     Files.write(Paths.get(MainActivity.workDir + "/Title.txt"), capsTitle.getBytes(StandardCharsets.UTF_8));
                     Files.write(Paths.get(MainActivity.workDir + "/Timestamp.txt"), String.valueOf(dateStamp).getBytes(StandardCharsets.UTF_8));
 
+
+                    ZoneId systemZone = ZoneId.systemDefault();
+                    ZonedDateTime currentTime = ZonedDateTime.now(systemZone);
+
+
+                    Files.write(Paths.get(MainActivity.workDir + "/TimeCreated.txt"), String.valueOf(currentTime.toInstant().toEpochMilli()).getBytes(StandardCharsets.UTF_8));
                     //Get the temporary working space
                     File temp = new File(String.valueOf(Path.of(MainActivity.workDir + "/temp/")));//Files.createDirectory(Paths.get(MainActivity.workDir.toString() + "/temp/")).toFile();
 

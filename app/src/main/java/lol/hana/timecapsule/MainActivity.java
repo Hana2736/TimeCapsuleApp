@@ -3,6 +3,7 @@ package lol.hana.timecapsule;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -22,6 +23,8 @@ import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
+import java.util.UUID;
+
 
 public class MainActivity extends AppCompatActivity {
     public static Path workDir;
@@ -71,8 +74,9 @@ public class MainActivity extends AppCompatActivity {
             for (File file : files) {
                 if (file.isDirectory()) {
                     try {
-                        //UUID id = UUID.fromString(file.getName());
+                        UUID id = UUID.fromString(file.getName());
                         long openTimeEpoch = Long.parseLong(Files.readAllLines(file.toPath().resolve("Timestamp.txt")).get(0));
+                        long createTimeEpoch = Long.parseLong(Files.readAllLines(file.toPath().resolve("TimeCreated.txt")).get(0));
                         String title = Files.readAllLines(file.toPath().resolve("Title.txt")).get(0);
 
                         View newCard = View.inflate(ctx, R.layout.caps_view, null);
@@ -97,7 +101,29 @@ public class MainActivity extends AppCompatActivity {
                             openBtn.setEnabled(true);
                             openBtn.setOnClickListener(v -> {
                                 Snackbar.make(getWindow().getDecorView().getRootView(), "Unpacking... Sit tight!", 5000).show();
+                                new Thread(() -> {
+                                    try {
+                                        EncryptionUtils util = new EncryptionUtils();
+                                        EncryptionUtils.resetTempDir();
+                                        EncryptionUtils.decrypt_file(workDir.toString(), file.getName());
+                                        File temp = new File(workDir.toString() + "/temp");
+                                        File zp = new File(workDir.toString() + "/temp/output.zip");
+                                        ZipUtils.unzip(zp, temp);
+                                        runOnUiThread(() -> {
+                                            Intent nextPage = new Intent(ctx, OpenCapsuleActivity.class);
+                                            nextPage.putExtra("dateCreated", createdTimeStr);
+                                            nextPage.putExtra("capsName", title);
+                                            nextPage.putExtra("uuid", id.toString());
+                                            startActivity(nextPage);
+                                        });
+                                    } catch (Exception e) {
+                                        Log.e("decrypt", "We seriously broke something: " + e);
+                                    }
 
+//                                File zloc = new File(workDir.toString()+"/output.zip");
+//                                File zloc = new File(workDir.toString()+"/output.zip");
+//                                ZipUtils.unzip(, );
+                                }).start();
                             });
                         }
                         layout.addView(newCard);
