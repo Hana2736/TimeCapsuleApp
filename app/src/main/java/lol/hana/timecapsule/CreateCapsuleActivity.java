@@ -1,15 +1,12 @@
 package lol.hana.timecapsule;
 
-import android.app.AlertDialog;
-import android.app.DatePickerDialog;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import androidx.activity.EdgeToEdge;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.PickVisualMediaRequest;
@@ -22,24 +19,23 @@ import com.google.android.material.color.DynamicColors;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
-import java.time.Instant;
 import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
-import java.util.*;
+import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 public class CreateCapsuleActivity extends AppCompatActivity {
+    public static boolean successfullyCreated;
     long dateStamp;
     List<Uri> selectedMedia;
     String capsTitle;
@@ -61,29 +57,31 @@ public class CreateCapsuleActivity extends AppCompatActivity {
 
         Button dateSel = findViewById(R.id.dateSelector);
         dateSel.setOnClickListener(v -> {
+
             MaterialDatePicker.Builder<Long> builder = MaterialDatePicker.Builder.datePicker();
+            //request today onwards
             CalendarConstraints constr = new CalendarConstraints.Builder().setValidator(DateValidatorPointForward.now()).build();
             builder.setCalendarConstraints(constr);
-            MaterialDatePicker pick =  builder.build();
+            MaterialDatePicker pick = builder.build();
+
+            //when we select OK on the calendar, do this
             pick.addOnPositiveButtonClickListener(o -> {
-               //Toast.makeText(getApplicationContext(),"Selected date is "+o,Toast.LENGTH_LONG).show();
-                dateStamp = (long)o;
+                //Toast.makeText(getApplicationContext(),"Selected date is "+o,Toast.LENGTH_LONG).show();
+                dateStamp = (long) o;
+
+
+                //convert to midnight on the day of the opening
                 ZoneId zoneId = ZoneId.systemDefault();
                 ZonedDateTime zonedDateTime = ZonedDateTime.now(zoneId);
                 ZoneOffset offset = zonedDateTime.getOffset();
                 dateStamp -= 1000L * offset.getTotalSeconds();
 
-
-
-
-
-
                 Date date = new Date(dateStamp);
                 SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yy");
                 String formattedDate = formatter.format(date);
-                dateSel.setText("Decrypts "+formattedDate);
+                dateSel.setText("Decrypts " + formattedDate);
             });
-            pick.show(getSupportFragmentManager(),"DATE_PICKER");
+            pick.show(getSupportFragmentManager(), "DATE_PICKER");
         });
 
 // Define the contract to pick multiple images
@@ -105,25 +103,18 @@ public class CreateCapsuleActivity extends AppCompatActivity {
                         // You can display the images or perform other actions with the URIs
 
                         if (i == 0) { // If it's the first image
-                               // Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
-                               // BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), bitmap);
-                                pickImagesButton.setVisibility(View.INVISIBLE);
-                                pickImagesButton.setEnabled(false);
-                                ImageView img = findViewById(R.id.firstPic);
-                               // img.setForeground(bitmapDrawable);
-                                img.setImageURI(selectedMedia.get(0));
-                                img.setVisibility(View.VISIBLE);
-                            }
+                            // Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), uri);
+                            // BitmapDrawable bitmapDrawable = new BitmapDrawable(getResources(), bitmap);
+                            pickImagesButton.setVisibility(View.INVISIBLE);
+                            pickImagesButton.setEnabled(false);
+                            ImageView img = findViewById(R.id.firstPic);
+                            // img.setForeground(bitmapDrawable);
+                            img.setImageURI(selectedMedia.get(0));
+                            img.setVisibility(View.VISIBLE);
                         }
+                    }
 
-                } else {
-                    Toast.makeText(getApplicationContext(), "No images selected", Toast.LENGTH_SHORT).show();
                 }
-
-
-
-            } else {
-                Toast.makeText(getApplicationContext(), "No images selected", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -140,62 +131,74 @@ public class CreateCapsuleActivity extends AppCompatActivity {
 
         Button sealBtn = findViewById(R.id.submitButton);
         sealBtn.setOnClickListener(v -> {
-           EditText nameEntry = findViewById(R.id.inputTitle);
-           EditText storyEntry = findViewById(R.id.inputSummary);
-           capsTitle = nameEntry.getText().toString();
-           capsStory = storyEntry.getText().toString();
-            if(!checkFields()){
-                Snackbar.make(getWindow().getDecorView().getRootView(),"Please fill all fields.",5000).show();
+            //find the text boxes and store their contents
+            EditText nameEntry = findViewById(R.id.inputTitle);
+            EditText storyEntry = findViewById(R.id.inputSummary);
+            capsTitle = nameEntry.getText().toString();
+            capsStory = storyEntry.getText().toString();
+
+            //check that theyve added photos and text
+            if (!checkFields()) {
+                Snackbar.make(getWindow().getDecorView().getRootView(), "Please fill all fields.", 5000).show();
                 return;
             }
-            Snackbar.make(getWindow().getDecorView().getRootView(),"Hang on, sealing the time capsule...",5000).show();
+            Snackbar.make(getWindow().getDecorView().getRootView(), "Hang on, sealing the time capsule...", 5000).show();
+
+            //prevent editing while the app is busy
             lockAllFields();
             new Thread(() -> {
+                //prepare the environment
                 EncryptionUtils.resetTempDir();
                 try {
                     int i = 0;
+                    //copy all of the images the user selected from their gallery into the app private storage
                     for (Uri media : selectedMedia) {
                         ZipUtils.copyFile(this, media, Paths.get(MainActivity.workDir + "/temp/" + i));
                         i++;
                     }
 
+                    //store their story and the title and unlock dates on the disk
                     Files.write(Paths.get(MainActivity.workDir + "/temp/Story.txt"), capsStory.getBytes(StandardCharsets.UTF_8));
                     Files.write(Paths.get(MainActivity.workDir + "/Title.txt"), capsTitle.getBytes(StandardCharsets.UTF_8));
                     Files.write(Paths.get(MainActivity.workDir + "/Timestamp.txt"), String.valueOf(dateStamp).getBytes(StandardCharsets.UTF_8));
 
+                    //Get the temporary working space
                     File temp = new File(String.valueOf(Path.of(MainActivity.workDir + "/temp/")));//Files.createDirectory(Paths.get(MainActivity.workDir.toString() + "/temp/")).toFile();
 
                     //Toast.makeText(getBaseContext(),temp.toPath().toAbsolutePath().toString(),Toast.LENGTH_LONG).show();
 
+                    //compress the story and photos inside a zip
                     File outputZipFile = new File(MainActivity.workDir.toString() + "/output.zip");
                     ZipUtils.zipFolder(temp, outputZipFile);
 
+                    //encrypt the zip file containing the user data. this will get fresh keys from the server and
+                    //store the opening time on the server
                     EncryptionUtils encryptionUtils = new EncryptionUtils();
                     encryptionUtils.encrypt_file(MainActivity.workDir.toString(), dateStamp);
 
+                    //notify the homepage we added a capsule and close this view
+                    successfullyCreated = true;
+                    runOnUiThread(this::finish);
 
                 } catch (Exception e) {
                     Log.e("Writing", "We seriously broke something: " + e);
                 }
             }).start();
         });
-
-
-
-
         DynamicColors.applyToActivitiesIfAvailable(getApplication());
     }
-    boolean checkFields(){
-        if(dateStamp == 0)
+
+    boolean checkFields() {
+        if (dateStamp == 0)
             return false;
-        if(capsTitle.isEmpty())
+        if (capsTitle.isEmpty())
             return false;
-        if(capsStory.isEmpty())
+        if (capsStory.isEmpty())
             return false;
         return !selectedMedia.isEmpty();
     }
 
-    void lockAllFields(){
+    void lockAllFields() {
         findViewById(R.id.dateSelector).setEnabled(false);
         findViewById(R.id.inputTitle).setEnabled(false);
         findViewById(R.id.inputSummary).setEnabled(false);

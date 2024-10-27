@@ -1,4 +1,5 @@
 package lol.hana.timecapsule;
+
 import android.content.Context;
 import android.net.Uri;
 import android.util.Log;
@@ -30,20 +31,20 @@ public class ZipUtils {
     }
 
     public static void addToZip(File file, ZipOutputStream zos) throws IOException {
-            FileInputStream fis = new FileInputStream(file);
+        FileInputStream fis = new FileInputStream(file);
 
-            ZipEntry zipEntry = new ZipEntry(file.getName());
-            zos.putNextEntry(zipEntry);
+        ZipEntry zipEntry = new ZipEntry(file.getName());
+        zos.putNextEntry(zipEntry);
 
-            byte[] buffer = new byte[1024];
-            int length;
-            while ((length = fis.read(buffer)) >= 0) {
-                zos.write(buffer, 0, length);
-            }
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = fis.read(buffer)) >= 0) {
+            zos.write(buffer, 0, length);
+        }
 
-            // Close the zip entry
-            zos.closeEntry();
-            fis.close();
+        // Close the zip entry
+        zos.closeEntry();
+        fis.close();
     }
 
     public static void unzip(File zip, File dest) throws IOException {
@@ -66,24 +67,23 @@ public class ZipUtils {
         }
 
 
-
         zis.close();
         fis.close();
     }
 
-    public static void copyFile(Context c, Uri input, Path output){
-       try{
-           InputStream fis = c.getContentResolver().openInputStream(input);
-           File dest = new File(output.toString());
-           FileOutputStream fos = new FileOutputStream(dest);
-           byte[] buffer = new byte[1024];
-           int length;
-           while ((length = fis.read(buffer)) >= 0) {
-               fos.write(buffer, 0, length);
-           }
-       } catch (Exception e){
-           Log.e("copy","copy fail "+e.toString());
-       }
+    public static void copyFile(Context c, Uri input, Path output) {
+        try {
+            InputStream fis = c.getContentResolver().openInputStream(input);
+            File dest = new File(output.toString());
+            FileOutputStream fos = new FileOutputStream(dest);
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = fis.read(buffer)) >= 0) {
+                fos.write(buffer, 0, length);
+            }
+        } catch (Exception e) {
+            Log.e("copy", "copy fail " + e);
+        }
 
     }
 
